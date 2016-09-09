@@ -174,12 +174,68 @@ let rec eval1 (e : expr) : int =
     | Prim _ -> failwith "unknown primitive"
     
 (* type expr2 *)
-
+type expr2 = 
+  | CstI of int
+  | Prim of string * expr2 * expr2
+  | If   of expr2 * expr2 * expr2
 
 (* eval2 : expr2 -> int *)
+let rec eval2 (e : expr2) : int =
+    match e with
+    | CstI i -> i
+    | Prim("+", e1, e2) -> eval2 e1 + eval2 e2
+    | Prim("*", e1, e2) -> eval2 e1 * eval2 e2
+    | Prim("-", e1, e2) -> eval2 e1 - eval2 e2
 
+    | Prim("<", e1, e2) -> 
+            if ((eval2 e1) < (eval2 e2)) then
+                    1
+            else
+                    0
 
+    | Prim(">", e1, e2) -> 
+            if ((eval2 e1) > (eval2 e2)) then
+                    1
+            else
+                    0
+                    
+    | Prim("==", e1, e2) -> 
+            if ((eval2 e1) = (eval2 e2)) then
+                    1
+            else
+                    0
+    | Prim("max", e1, e2) ->
+            if ( (eval2 e1) > (eval2 e2)) then
+                    eval2 e1
+            else
+                    eval2 e2
 
+    | Prim("min", e1, e2) ->
+            if ( (eval2 e1) < (eval2 e2)) then
+                    eval2 e1
+            else
+                    eval2 e2
+    
+    | If (e0, e1, e2) ->
+            if (not ((eval2 e0) = 0)) then
+                    eval2 e1
+            else
+                    eval2 e2
+                    
+
+    | Prim _ -> failwith "unknown primitive"
+
+// Testing
+let num8 = CstI 3
+let num9 = CstI 12
+let num10 = CstI 0
+let num11 = CstI 1
+
+let test8 = Prim("<", num8, num9)
+let test9 = Prim(">", num8, num9)
+
+let test10 = If(num10, num8, num9)
+let test11 = If(num11, num8, num9)
 
 (* Problem 3 *)
 
