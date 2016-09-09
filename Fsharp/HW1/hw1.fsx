@@ -56,16 +56,11 @@ printfn "%i" (sum E)
 
 (* elem : int -> ilist -> int *)
 
-(*
-let rec elem l n =
-  match l with
-  | E -> failwith "Index out of bounds"
-  | L(h,t) ->
-        if (n = 0) then 
-          h
-        else 
-          elem n-1 t
-*)
+let rec elem n l =
+   match l with
+   | L(h,t) when n = 1 -> h
+   | L(h,t) -> elem (n-1) t
+   | E -> failwith "Index out of bound"
 
 (* *** Testing *** *)
 //printfn "%i" (elem 2 l1)
