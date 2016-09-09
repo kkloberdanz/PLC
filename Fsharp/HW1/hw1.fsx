@@ -116,6 +116,13 @@ type expr =
   | CstI of int
   | Prim of string * expr * expr
 
+let num1 = CstI 3
+let num2 = CstI 12
+
+let test4 = Prim("+",num1,num2)
+let test5 = Prim("==",num1,num2)
+let test6 = Prim("max",num1,num2)
+
 
 let rec eval (e : expr) : int =
     match e with
