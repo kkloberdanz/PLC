@@ -238,17 +238,22 @@ let e3 = Add(Var "x", Add(Var "y", Add(Var "z", Var "v")))
 
 (* toString : aexpr -> string *)
 
+
 let int2String (x:int) = string x
 
-(*
-let toString l =
+let rec toString (l:aexpr) : string =
     match l with
     | Var i -> i
     | CstI j -> int2String j
-    | Add(Var m, Var n) -> m + " + " + n
-    |
-*)
-     
+    | Add(m, Var n) -> toString m + " + " + n + ")"
+    | Add(m, CstI n) -> toString m + " + " + int2String n + ")"
+    | Add(m,n) -> toString m + " + (" + toString n
+    | Mul(m, Var n) -> toString m + " * " + n + ")"
+    | Mul(m, CstI n) -> toString m + " * " + int2String n + ")"
+    | Mul(m,n) -> toString m + " * (" + toString n
+    | Sub(m, Var n) -> toString m + " - " + n + ")"
+    | Sub(m, CstI n) -> toString m + " - " + int2String n + ")"
+    | Sub(m,n) -> toString m + " - (" + toString n
 
 
 (* simplify : aexpr -> aexpr *)
