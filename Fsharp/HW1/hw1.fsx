@@ -141,36 +141,11 @@ let rec eval1 (e : expr) : int =
     | Prim("+", e1, e2) -> eval1 e1 + eval1 e2
     | Prim("*", e1, e2) -> eval1 e1 * eval1 e2
     | Prim("-", e1, e2) -> eval1 e1 - eval1 e2
-
-    | Prim("<", e1, e2) -> 
-            if ((eval1 e1) < (eval1 e2)) then
-                    1
-            else
-                    0
-
-    | Prim(">", e1, e2) -> 
-            if ((eval1 e1) > (eval1 e2)) then
-                    1
-            else
-                    0
-                    
-    | Prim("==", e1, e2) -> 
-            if ((eval1 e1) = (eval e2)) then
-                    1
-            else
-                    0
-    | Prim("max", e1, e2) ->
-            if ( (eval1 e1) > (eval1 e2)) then
-                    eval1 e1
-            else
-                    eval1 e2
-
-    | Prim("min", e1, e2) ->
-            if ( (eval1 e1) < (eval1 e2)) then
-                    eval1 e1
-            else
-                    eval1 e2
-
+    | Prim("<",e1,e2) -> if eval1 e1 < eval1 e2 then 1 else 0
+    | Prim(">",e1,e2) -> if eval1 e1 > eval1 e2 then 1 else 0
+    | Prim("==",e1,e2) -> if eval1 e1 = eval1 e2 then 1 else 0
+    | Prim("max",e1,e2) -> if eval1 e1 < eval1 e2 then (eval1 e1) else (eval1 e2)
+    | Prim("min",e1,e2) -> if eval1 e1 > eval1 e2 then (eval1 e1) else (eval1 e2)
     | Prim _ -> failwith "unknown primitive"
     
 (* type expr2 *)
