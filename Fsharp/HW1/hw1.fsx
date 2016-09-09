@@ -240,16 +240,28 @@ let e3 = Add(Var "x", Add(Var "y", Add(Var "z", Var "v")))
 
 let int2String (x:int) = string x
 
+(*
 let toString l =
     match l with
     | Var i -> i
     | CstI j -> int2String j
     | Add(Var m, Var n) -> m + " + " + n
     |
+*)
      
 
 
 (* simplify : aexpr -> aexpr *)
+let simplify (e : aexpr) : aexpr =
+    match e with
+    | Add (0, e) -> e
+    | Add (e, 0) -> e
+    | Mul (0, e) -> 0
+    | Mul (e, 0) -> 0
+    | Mul (1, e) -> e
+    | Mul (e, 1) -> e
+    | Sub (e, e) -> 0
+    | Sub (e, 0) -> 0
 
 
 
