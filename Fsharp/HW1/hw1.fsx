@@ -218,11 +218,35 @@ let test11 = If(num11, num8, num9)
 
 (* type aexpr *)
 
+type aexpr =
+    | CstI of int
+    | Var of string
+    | Add of aexpr * aexpr
+    | Mul of aexpr * aexpr
+    | Sub of aexpr * aexpr
+
+
+
 
 (* expressions e1 e2 e2 *)
 
 
+let e1 = Sub(Var "v", Add(Var "w",Var "z"))
+let e2 = Mul(CstI 2, Sub(Var "v",Add(Var "w",Var "z")))
+let e3 = Add(Var "x", Add(Var "y", Add(Var "z", Var "v")))
+
+
 (* toString : aexpr -> string *)
+
+let int2String (x:int) = string x
+
+let toString l =
+    match l with
+    | Var i -> i
+    | CstI j -> int2String j
+    | Add(Var m, Var n) -> m + " + " + n
+    |
+     
 
 
 (* simplify : aexpr -> aexpr *)
