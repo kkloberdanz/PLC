@@ -231,6 +231,7 @@ let num9 = CstI 12
 let num10 = CstI 0
 let num11 = CstI 1
 
+let test7 = Prim ("min", num8, num9)
 let test8 = Prim("<", num8, num9)
 let test9 = Prim(">", num8, num9)
 
