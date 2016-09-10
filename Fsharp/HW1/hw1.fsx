@@ -259,21 +259,18 @@ let rec toString (l:aexpr) : string =
 (* simplify : aexpr -> aexpr *)
 let simplify (e : aexpr) : aexpr =
     match e with
-    | Add (0, e) -> e
-    | Add (e, 0) -> e
-    | Mul (0, e) -> 0
-    | Mul (e, 0) -> 0
-    | Mul (1, e) -> e
-    | Mul (e, 1) -> e
-    | Sub (e, e) -> 0
-    | Sub (e, 0) -> 0
+    | Add (CstI 0, e) -> e
+    | Add (e, CstI 0) -> e
+    | Mul (CstI 0, e) -> CstI 0
+    | Mul (e, CstI 0) -> CstI 0
+    | Mul (CstI 1, e) -> e
+    | Mul (e, CstI 1) -> e
+    | Sub (e1, e2) when e1 = e2 -> CstI 0
+    | Sub (e, CstI 0) -> CstI 0
 
 
+let e100 = Add(Var "x", CstI 0)
+let e200 = Mul(CstI 1, Var "x")
+let e300 = Mul(Add(CstI 1,CstI 0), Add(Var "x", CstI 0))
 
-
-
-
-
-
-
-
+let e400 = Sub(e100, e100)

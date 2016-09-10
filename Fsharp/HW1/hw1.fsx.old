@@ -56,16 +56,11 @@ printfn "%i" (sum E)
 
 (* elem : int -> ilist -> int *)
 
-(*
-let rec elem l n =
-  match l with
-  | E -> failwith "Index out of bounds"
-  | L(h,t) ->
-        if (n = 0) then 
-          h
-        else 
-          elem n-1 t
-*)
+let rec elem n l =
+   match l with
+   | L(h,t) when n = 1 -> h
+   | L(h,t) -> elem (n-1) t
+   | E -> failwith "Index out of bound"
 
 (* *** Testing *** *)
 //printfn "%i" (elem 2 l1)
@@ -90,10 +85,25 @@ printfn "but 9 is not in the list: %b" (isIn 9 l1)
 
 (* remove: int -> ilist -> ilist *)
 
+let rec remove x l =
+   match l with
+   | L(h,t) when x=h -> remove x t
+   | L(h,E) -> L(h,E)
+   | L(h,t) -> L(h,remove x t)
+   | E -> failwith "Empty List"
 
 (* move : ilist -> ilist -> ilist *)
 
-
+(*
+let rec move l1 l2 =
+    match l1 with
+    | E -> l1 := l2
+    | L(h, t) -> move t l2
+//let l1 = L(1, L(2, L(3, E)))
+let l2 = L(4, (L(5, L(6, E))))
+printfn "here"
+printfn "move l1 l2: %A" (move l1 l2)
+*)
 (* reverse : ilist -> ilist *)
 
 
@@ -106,6 +116,13 @@ type expr =
   | CstI of int
   | Prim of string * expr * expr
 
+let num1 = CstI 3
+let num2 = CstI 12
+
+let test4 = Prim("+",num1,num2)
+let test5 = Prim("==",num1,num2)
+let test6 = Prim("max",num1,num2)
+
 
 let rec eval (e : expr) : int =
     match e with
@@ -113,40 +130,139 @@ let rec eval (e : expr) : int =
     | Prim("+", e1, e2) -> eval e1 + eval e2
     | Prim("*", e1, e2) -> eval e1 * eval e2
     | Prim("-", e1, e2) -> eval e1 - eval e2
+
     | Prim _ -> failwith "unknown primitive"
 
 
 (* eval1 : expr -> int *)
-
-
+let rec eval1 (e : expr) : int =
+    match e with
+    | CstI i -> i
+    | Prim("+", e1, e2) -> eval1 e1 + eval1 e2
+    | Prim("*", e1, e2) -> eval1 e1 * eval1 e2
+    | Prim("-", e1, e2) -> eval1 e1 - eval1 e2
+    | Prim("<",e1,e2) -> if eval1 e1 < eval1 e2 then 1 else 0
+    | Prim(">",e1,e2) -> if eval1 e1 > eval1 e2 then 1 else 0
+    | Prim("==",e1,e2) -> if eval1 e1 = eval1 e2 then 1 else 0
+    | Prim("max",e1,e2) -> if eval1 e1 < eval1 e2 then (eval1 e1) else (eval1 e2)
+    | Prim("min",e1,e2) -> if eval1 e1 > eval1 e2 then (eval1 e1) else (eval1 e2)
+    | Prim _ -> failwith "unknown primitive"
+    
 (* type expr2 *)
-
+type expr2 = 
+  | CstI of int
+  | Prim of string * expr2 * expr2
+  | If   of expr2 * expr2 * expr2
 
 (* eval2 : expr2 -> int *)
+let rec eval2 (e : expr2) : int =
+    match e with
+    | CstI i -> i
+    | Prim("+", e1, e2) -> eval2 e1 + eval2 e2
+    | Prim("*", e1, e2) -> eval2 e1 * eval2 e2
+    | Prim("-", e1, e2) -> eval2 e1 - eval2 e2
 
+    | Prim("<", e1, e2) -> 
+            if ((eval2 e1) < (eval2 e2)) then
+                    1
+            else
+                    0
 
+    | Prim(">", e1, e2) -> 
+            if ((eval2 e1) > (eval2 e2)) then
+                    1
+            else
+                    0
+                    
+    | Prim("==", e1, e2) -> 
+            if ((eval2 e1) = (eval2 e2)) then
+                    1
+            else
+                    0
+    | Prim("max", e1, e2) ->
+            if ( (eval2 e1) > (eval2 e2)) then
+                    eval2 e1
+            else
+                    eval2 e2
 
+    | Prim("min", e1, e2) ->
+            if ( (eval2 e1) < (eval2 e2)) then
+                    eval2 e1
+            else
+                    eval2 e2
+    
+    | If (e0, e1, e2) ->
+            if (not ((eval2 e0) = 0)) then
+                    eval2 e1
+            else
+                    eval2 e2
+                    
+
+    | Prim _ -> failwith "unknown primitive"
+
+// Testing
+let num8 = CstI 3
+let num9 = CstI 12
+let num10 = CstI 0
+let num11 = CstI 1
+
+let test7 = Prim ("min", num8, num9)
+let test8 = Prim("<", num8, num9)
+let test9 = Prim(">", num8, num9)
+
+let test10 = If(num10, num8, num9)
+let test11 = If(num11, num8, num9)
 
 (* Problem 3 *)
 
 
 (* type aexpr *)
 
+type aexpr =
+    | CstI of int
+    | Var of string
+    | Add of aexpr * aexpr
+    | Mul of aexpr * aexpr
+    | Sub of aexpr * aexpr
+
+
+
 
 (* expressions e1 e2 e2 *)
 
 
+let e1 = Sub(Var "v", Add(Var "w",Var "z"))
+let e2 = Mul(CstI 2, Sub(Var "v",Add(Var "w",Var "z")))
+let e3 = Add(Var "x", Add(Var "y", Add(Var "z", Var "v")))
+
+
 (* toString : aexpr -> string *)
+
+let int2String (x:int) = string x
+
+(*
+let toString l =
+    match l with
+    | Var i -> i
+    | CstI j -> int2String j
+    | Add(Var m, Var n) -> m + " + " + n
+    |
+*)
+     
 
 
 (* simplify : aexpr -> aexpr *)
+let simplify (e : aexpr) : aexpr =
+    match e with
+    | Add (0, e) -> e
+    | Add (e, 0) -> e
+    | Mul (0, e) -> 0
+    | Mul (e, 0) -> 0
+    | Mul (1, e) -> e
+    | Mul (e, 1) -> e
+    | Sub (e, e) -> 0
+    | Sub (e, 0) -> 0
+    | _          -> e
 
 
-
-
-
-
-
-
-
-
+let e100 = Mul(CstI 0, Sub(Var "v",Add(Var "w",Var "z")))
