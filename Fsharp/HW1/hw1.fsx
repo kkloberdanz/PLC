@@ -257,7 +257,7 @@ let rec toString (l:aexpr) : string =
 
 
 (* simplify : aexpr -> aexpr *)
-let simplify (e : aexpr) : aexpr =
+let rec simplify (e : aexpr) : aexpr =
     match e with
     | Add (CstI 0, e) -> e
     | Add (e, CstI 0) -> e
@@ -267,6 +267,7 @@ let simplify (e : aexpr) : aexpr =
     | Mul (e, CstI 1) -> e
     | Sub (e1, e2) when e1 = e2 -> CstI 0
     | Sub (e, CstI 0) -> CstI 0
+    //| Add(e1, e2) -> simplify e1; simplify e2
 
 
 let e100 = Add(Var "x", CstI 0)
