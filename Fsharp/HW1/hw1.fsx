@@ -69,14 +69,13 @@ let rec elem n l =
 
 
 (* isIn : int -> ilist -> bool *)
-let rec isIn x l = 
-  match l with
-  | E -> false
-  | L(h, t) -> 
-          if (h = x) then
-            true
-          else
-            isIn x t
+
+let rec isIn x l =
+    match l with
+    | L(h,t) when x = h -> true
+    | L(h,t) -> isIn x t
+    | E -> false
+
 
 (* *** Testing *** *)
 printfn "2 is in the list: %b" (isIn 2 l1)
