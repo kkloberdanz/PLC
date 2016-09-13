@@ -107,7 +107,7 @@ let reverse l =
     match l with
     | L(h,E) -> L(h,E)
     | L(h,t) -> move l E
-    | E -> failwith "Empty List"
+    | E -> E
 
 
 
