@@ -41,10 +41,12 @@ type ilist =
 
 
 (* sum : ilist -> int *)
+
 let rec sum l =
-  match l with
-  | E -> 0
-  | L(h, t) -> h + sum t
+    match l with
+    | L(h,E) -> h
+    | L(h,t) -> h + sum t
+    | E -> 0
 
 (* *** Testing *** *)
 let l1 = L(1, L(2, L(3, E)))
