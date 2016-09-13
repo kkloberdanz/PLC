@@ -94,17 +94,22 @@ let rec remove x l =
 
 (* move : ilist -> ilist -> ilist *)
 
-(*
-let rec move l1 l2 =
-    match l1 with
-    | E -> l1 := l2
-    | L(h, t) -> move t l2
-//let l1 = L(1, L(2, L(3, E)))
-let l2 = L(4, (L(5, L(6, E))))
-printfn "here"
-printfn "move l1 l2: %A" (move l1 l2)
-*)
+let rec move l j =
+    match l with
+    | L(h,E) -> L(h,j)
+    | L(h,t) -> move t (L(h,j))
+    | E -> failwith "Empty List"
+
+
+
 (* reverse : ilist -> ilist *)
+
+let reverse l =
+    match l with
+    | L(h,E) -> L(h,E)
+    | L(h,t) -> move l E
+    | E -> failwith "Empty List"
+
 
 
 
