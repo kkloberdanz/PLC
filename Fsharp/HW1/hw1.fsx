@@ -85,11 +85,11 @@ printfn "but 9 is not in the list: %b" (isIn 9 l1)
 (* remove: int -> ilist -> ilist *)
 
 let rec remove x l =
-   match l with
-   | L(h,t) when x=h -> remove x t
-   | L(h,E) -> L(h,E)
-   | L(h,t) -> L(h,remove x t)
-   | E -> failwith "Empty List"
+    match l with
+    | L(h,t) when x = h -> remove x t
+    | L(h,E) -> L(h,E)
+    | L(h,t) -> L(h,remove x t)
+    | E -> E
 
 (* move : ilist -> ilist -> ilist *)
 
